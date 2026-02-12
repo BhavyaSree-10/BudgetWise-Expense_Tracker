@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register | BudgetWise</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', sans-serif;
+            /* CHANGE 'bg.jpg' TO YOUR ACTUAL IMAGE FILENAME BELOW */
+            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), 
+                        url('bg.jpg.jpeg') no-repeat center center fixed;
+            background-size: cover;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .project-title {
+            position: absolute;
+            top: 25px;
+            left: 35px;
+            color: #ffffff;
+            font-size: 22px;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.6);
+        }
+
+        .container {
+            display: flex;
+            width: 850px;
+            height: 520px;
+            background: rgba(255, 255, 255, 0.98);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+        }
+
+        .form-section {
+            flex: 1.2;
+            padding: 45px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .info-section {
+            flex: 0.8;
+            background: #00c3ff;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 40px;
+        }
+
+        .info-section h2 { font-size: 36px; margin-bottom: 10px; }
+
+        .input-box {
+            position: relative;
+            margin-bottom: 15px;
+        }
+
+        .input-box i {
+            position: absolute;
+            left: 12px;
+            top: 14px;
+            color: #6366f1;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px 12px 12px 40px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-sizing: border-box;
+            outline: none;
+        }
+
+        button {
+            width: 100%;
+            padding: 14px;
+            background: #00c3ff;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: bold;
+            margin-top: 10px;
+            font-size: 16px;
+        }
+
+        .link-text { text-align: center; margin-top: 15px; font-size: 14px; color: #64748b; }
+        .link-text a { color: #6366f1; text-decoration: none; font-weight: bold; }
+        #error { color: #ff4d4d; font-size: 13px; margin-bottom: 10px; height: 15px; }
+    </style>
+</head>
+<body>
+
+<div class="project-title">
+    BudgetWise AI Driven Expense Tracker and Budget Advisor
+</div>
+
+<div class="container">
+    <div class="form-section">
+        <h1 style="font-size: 24px; margin-bottom: 5px;">BudgetWise Expense Tracker</h1>
+        <h2 style="font-size: 18px; font-weight: 400; color: #64748b; margin-bottom: 25px;">Registration</h2>
+
+        <form onsubmit="return validateForm()">
+            <div class="input-box">
+                <i class="fas fa-user"></i>
+                <input type="text" id="name" placeholder="Full Name">
+            </div>
+            <div class="input-box">
+                <i class="fas fa-envelope"></i>
+                <input type="email" id="email" placeholder="Email">
+            </div>
+            <div class="input-box">
+                <i class="fas fa-lock"></i>
+                <input type="password" id="password" placeholder="Password">
+            </div>
+            <div class="input-box">
+                <i class="fas fa-shield-alt"></i>
+                <input type="password" id="confirmPassword" placeholder="Confirm Password">
+            </div>
+
+            <p id="error"></p>
+            <button type="submit">Register</button>
+        </form>
+
+        <p class="link-text">Already have an account? <a href="login.html">Login</a></p>
+    </div>
+
+    <div class="info-section">
+        <h2>Track Smart.</h2>
+        <p>Control your expenses wisely.</p>
+    </div>
+</div>
+
+<script>
+function validateForm() {
+    const name = document.getElementById("name").value.trim();
+    const email = document.getElementById("email").value.trim();
+    const password = document.getElementById("password").value;
+    const confirmPassword = document.getElementById("confirmPassword").value;
+    const error = document.getElementById("error");
+
+    if (name.length < 4) { error.innerText = "Name must be at least 4 letters"; return false; }
+    if (!email.endsWith("@gmail.com")) { error.innerText = "Use @gmail.com format"; return false; }
+    
+    const passRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&]).{6,}$/;
+    if (!passRegex.test(password)) { error.innerText = "Password too weak!"; return false; }
+    if (password !== confirmPassword) { error.innerText = "Passwords do not match"; return false; }
+
+    alert("Registration successful!");
+    localStorage.setItem("displayName", name.toUpperCase());
+    window.location.href = "login.html";
+    return false;
+}
+</script>
+
+</body>
+</html>
+
+
+
+
+
+

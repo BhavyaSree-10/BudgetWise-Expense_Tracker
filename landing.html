@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>BudgetWise Expense Tracker</title>
+
+    <style>
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Segoe UI", Arial, sans-serif;
+        }
+
+      
+        body {
+            min-height: 100vh;
+            background: url("bg.jpg.jpeg") center / cover no-repeat;
+        }
+
+       
+        .overlay {
+            min-height: 100vh;
+            background: rgba(0, 0, 0, 0.65);
+            backdrop-filter: blur(5px);
+            position: relative;
+        }
+
+        
+        .top-header {
+            position: absolute;
+            top: 25px;
+            left: 50px;
+            right: 50px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+       
+        .brand h1 {
+            color: white;
+            font-size: 28px;
+            font-weight: 800;
+        }
+
+        .brand p {
+            color: #d0d0d0;
+            font-size: 13px;
+            margin-top: 4px;
+        }
+
+   
+        .auth-actions {
+            display: flex;
+            gap: 15px;
+        }
+
+        .login-btn {
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            padding: 10px 20px;
+            border-radius: 25px;
+        }
+
+        .register-btn {
+            text-decoration: none;
+            padding: 10px 24px;
+            border-radius: 25px;
+            font-weight: bold;
+            color: white;
+            border: 2px solid rgba(255,255,255,0.6);
+        }
+
+      
+        .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;  
+    align-items: center;      
+    text-align: center;        
+    max-width: 800px;
+    margin: 0 auto;            
+    color: white;
+}
+
+
+        .hero h2 {
+            font-size: 50px;
+            font-weight: 800;
+            margin-bottom: 18px;
+        }
+
+        .hero p {
+            font-size: 18px;
+            color: #e6e6e6;
+            line-height: 1.6;
+            margin-bottom: 35px;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 20px;
+        }
+
+        .primary-btn {
+            background: #00c8ff;
+            color: #000;
+            padding: 14px 36px;
+            border-radius: 30px;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        .secondary-btn {
+            padding: 14px 36px;
+            border-radius: 30px;
+            border: 2px solid rgba(255,255,255,0.6);
+            color: white;
+            font-weight: bold;
+            text-decoration: none;
+        }
+    </style>
+
+</head>
+<body>
+
+    <div class="overlay">
+
+        
+        <header class="top-header">
+            <div class="brand">
+                <h1>BudgetWise</h1>
+                <p>AI-Driven Expense Tracker & Advisor</p>
+            </div>
+
+            <div class="auth-actions">
+                <a href="login.html" class="login-btn">Login</a>
+                <a href="register.html" class="register-btn">Register</a>
+            </div>
+        </header>
+
+ 
+        <section class="hero">
+            <h2>Track Expenses. Save Smarter.</h2>
+            <p>
+                BudgetWise helps you manage daily expenses and gain AI-powered
+                budget insights for a smarter financial future.
+            </p>
+
+            <div class="hero-buttons">
+                <a href="register.html" class="primary-btn">Get Started</a>
+                <a href="register.html" class="secondary-btn">Create Account</a>
+            </div>
+        </section>
+
+    </div>
+
+</body>
+</html>

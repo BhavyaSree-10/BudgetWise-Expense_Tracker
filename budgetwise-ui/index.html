@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Verify Account | BudgetWise</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="otp-container">
+    <div class="background-image"></div>
+    
+    <div class="otp-card" id="emailSection">
+      <h2>Verify Your Email</h2>
+      <p>Enter your email to receive a code.</p>
+      <input type="email" id="userEmailInput" placeholder="example@gmail.com" class="plain-input">
+      <button class="verify-btn" onclick="sendOtp()">Send OTP</button>
+      <a href="../login.html" class="back-link">Back to Login</a>
+    </div>
+
+    <div class="otp-card" id="otpSection" style="display: none;">
+      <h2>Enter Code</h2>
+      <p>Sent to: <strong id="confirmEmail"></strong></p>
+      <div class="otp-inputs">
+        <input type="text" class="otp-box" maxlength="1">
+        <input type="text" class="otp-box" maxlength="1">
+        <input type="text" class="otp-box" maxlength="1">
+        <input type="text" class="otp-box" maxlength="1">
+        <input type="text" class="otp-box" maxlength="1">
+        <input type="text" class="otp-box" maxlength="1">
+      </div>
+      <button class="verify-btn" onclick="verifyOtp()">Verify Account</button>
+      <p id="msg"></p>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+  <script src="login.js"></script>
+</body>
+</html>

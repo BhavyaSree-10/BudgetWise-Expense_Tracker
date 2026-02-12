@@ -1,0 +1,57 @@
+* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+
+.otp-container {
+    height: 100vh; width: 100%; display: flex; justify-content: center;
+    align-items: center; position: relative; overflow: hidden;
+}
+
+.background-image {
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    background: url('../bg.jpg.jpeg') no-repeat center center/cover;
+    filter: blur(8px); z-index: -1; transform: scale(1.1);
+}
+
+.otp-card {
+    background: rgba(255, 255, 255, 0.9); padding: 40px; border-radius: 20px;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.2); text-align: center; width: 400px;
+}
+
+.otp-inputs { display: flex; gap: 10px; justify-content: center; margin: 25px 0; }
+
+.otp-box {
+    width: 45px; height: 55px; text-align: center; font-size: 24px;
+    border: 2px solid #ddd; border-radius: 10px; background: #f9f9f9;
+}
+
+.verify-btn {
+    width: 100%; padding: 12px; background: #00c3ff; border: none;
+    border-radius: 10px; color: white; font-weight: bold; cursor: pointer;
+}
+
+#resendBtn:disabled { color: #ccc; cursor: not-allowed; }
+/* Add to your existing style.css */
+.input-group {
+    margin: 20px 0;
+}
+
+.plain-input {
+    width: 100%;
+    padding: 12px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    outline: none;
+    transition: border-color 0.3s;
+}
+
+.plain-input:focus {
+    border-color: #00c3ff;
+}
+
+.back-link {
+    display: block;
+    margin-top: 15px;
+    color: #666;
+    text-decoration: none;
+    font-size: 14px;
+}

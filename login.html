@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login | BudgetWise</title>
+    <style>
+        html, body { margin: 0; padding: 0; height: 100%; font-family: Arial, sans-serif; }
+        .landing { background: url('bg.jpg.jpeg') no-repeat center center/cover; height: 100vh; width: 100%; position: relative; }
+        .overlay { position: relative; height: 100%; width: 100%; display: flex; justify-content: center; align-items: center; background-color: rgba(0,0,0,0.3); }
+        .app-header { position: absolute; top: 20px; left: 20px; font-size: 24px; font-weight: bold; color: white; z-index: 10; }
+        .card { display: flex; border-radius: 10px; overflow: hidden; box-shadow: 0 0 15px rgba(0,0,0,0.3); background: rgba(255,255,255,0.95); max-width: 800px; width: 90%; }
+        .form-section, .info-section { padding: 30px; flex: 1; }
+        .info-section { background: #1da1f2; color: white; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; }
+        .input-box { margin-bottom: 15px; text-align: left; }
+        .input-box input { border: 1px solid #ccc; outline: none; width: 100%; padding: 10px; font-size: 15px; border-radius: 5px; box-sizing: border-box; }
+        button { padding: 10px 0; width: 100%; background: #00c3ff; border: none; border-radius: 20px; color: black; font-weight: bold; cursor: pointer; margin-top: 10px; }
+        .hide { display: none !important; }
+        #resetModal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); display: flex; justify-content: center; align-items: center; z-index: 100; }
+        .modal-content { background: white; padding: 30px; border-radius: 10px; width: 350px; text-align: center; }
+    </style>
+</head>
+<body>
+<div class="landing">
+    <div class="overlay">
+        <div class="app-header">BudgetWise AI Driven Expense Tracker</div>
+        <div class="card">
+            <div class="form-section">
+                <h1>BudgetWise</h1>
+                <h2>Login</h2>
+                <form onsubmit="loginUser(event)">
+                    <div class="input-box"><input type="text" id="email" placeholder="Email" required></div>
+                    <div class="input-box"><input type="password" id="password" placeholder="Password" required></div>
+                    <button type="submit">Login</button>
+                </form>
+                <p><a href="#" onclick="toggleResetModal(true)" style="color: #1da1f2; text-decoration: none;">Forgot Password?</a></p>
+            </div>
+            <div class="info-section"><h2>Welcome Back</h2><p>Manage expenses smarter.</p></div>
+        </div>
+    </div>
+</div>
+
+<div id="resetModal" class="hide">
+    <div class="modal-content">
+        <h2 id="modalTitle">Reset Password</h2>
+        <div id="step1">
+            <p>Enter email to receive OTP</p>
+            <div class="input-box"><input type="email" id="forgotEmail" placeholder="bsree586@gmail.com"></div>
+            <button onclick="sendOTPAndNext()">Next</button>
+        </div>
+        <div id="step2" class="hide">
+            <div class="input-box">
+                <label>password</label>
+                <input type="password" id="newPass">
+            </div>
+            <div class="input-box">
+                <label>Confirm password</label>
+                <input type="password" id="confirmPass">
+            </div>
+            <button onclick="goToVerify()">Next</button>
+        </div>
+        <div class="nav-item" onclick="logoutUser()" style="cursor: pointer;">
+    <i class="fas fa-sign-out-alt"></i> 
+    <span>Logout</span>
+</div>
+        <p><a href="#" onclick="toggleResetModal(false)" style="color: gray; text-decoration: none;">Cancel</a></p>
+    </div>
+</div>
+
+<script>
+function toggleResetModal(show) { document.getElementById('resetModal').classList.toggle('hide', !show); }
+
+async function sendOTPAndNext() {
+    const email = document.getElementById('forgotEmail').value;
+    const response = await fetch('http://localhost:3000/api/send-otp', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email })
+    });
+    const data = await response.json();
+    if (response.ok) {
+        localStorage.setItem("resetEmail", email);
+        localStorage.setItem("serverOTP", data.otp);
+        document.getElementById('step1').classList.add('hide');
+        document.getElementById('step2').classList.remove('hide');
+    }
+}
+
+function goToVerify() {
+    const p1 = document.getElementById('newPass').value;
+    const p2 = document.getElementById('confirmPass').value;
+    if(p1 !== p2) return alert("Passwords do not match!");
+    localStorage.setItem("pendingPassword", p1);
+    window.location.href = "budgetwise-ui/index.html?mode=verify";
+}
+
+function loginUser(event) {
+    event.preventDefault();
+    window.location.href = "budgetwise-ui/index.html";
+}
+</script>
+</body>
+</html>
