@@ -1,0 +1,98 @@
+[
+  {
+    "id": 1770918685515,
+    "date": "2026-02-01",
+    "category": "Salary",
+    "description": "Office salary",
+    "amount": 100000,
+    "type": "income"
+  },
+  {
+    "id": 1770918709931,
+    "date": "2026-02-02",
+    "category": "Salary",
+    "description": "Freelance Salary",
+    "amount": 20000,
+    "type": "income"
+  },
+  {
+    "id": 1770918730139,
+    "date": "2026-02-08",
+    "category": "Travel",
+    "description": "Office salary",
+    "amount": 10000,
+    "type": "expense"
+  },
+  {
+    "id": 1770918800636,
+    "date": "2026-02-05",
+    "category": "Rent",
+    "description": "Freelance Salary",
+    "amount": 8000,
+    "type": "expense"
+  },
+  {
+    "id": 1770918830154,
+    "date": "2026-02-07",
+    "category": "Shopping",
+    "description": "Office salary",
+    "amount": 2000,
+    "type": "expense"
+  },
+  {
+    "id": 1770918849715,
+    "date": "2026-02-02",
+    "category": "Fee",
+    "description": "Office salary",
+    "amount": 40000,
+    "type": "expense"
+  },
+  {
+    "id": 1770919487437,
+    "date": "2026-02-04",
+    "category": "Entertainment",
+    "description": "Freelance Salary",
+    "amount": 1000,
+    "type": "expense"
+  },
+  {
+    "id": 1770919508869,
+    "date": "2026-02-05",
+    "category": "Bills",
+    "description": "Office salary",
+    "amount": 1500,
+    "type": "expense"
+  },
+  {
+    "id": 1770921622108,
+    "date": "2026-02-13",
+    "category": "Entertainment",
+    "description": "Office salary",
+    "amount": 10000,
+    "type": "expense"
+  },
+  {
+    "id": 1770923884186,
+    "date": "2026-02-12",
+    "category": "Food",
+    "description": "Office salary",
+    "amount": 1000,
+    "type": "expense"
+  },
+  {
+    "id": 1771258434207,
+    "date": "2026-02-16",
+    "category": "Shopping",
+    "description": "Office salary",
+    "amount": 3000,
+    "type": "expense"
+  },
+  {
+    "id": 1771261875040,
+    "date": "2026-02-04",
+    "category": "Salary",
+    "description": "Office salary",
+    "amount": 40000,
+    "type": "to_piggy"
+  }
+]

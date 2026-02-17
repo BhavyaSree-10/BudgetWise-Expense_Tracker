@@ -4,143 +4,196 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BudgetWise AI | Professional Dashboard</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="Dashboard.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* Global Layout Fixes */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        
+        .app-container { display: flex; min-height: 100vh; background: #0a0a12; }
+
+        /* Sidebar - Pinned to the very left edge */
+        .sidebar {
+            width: 250px;
+            background: #11111e;
+            height: 100vh;
+            position: fixed;
+            left: 0;
+            top: 0;
+            display: flex;
+            flex-direction: column;
+            border-right: 1px solid #222;
+            z-index: 1000;
+        }
+        .brand { padding: 25px; font-size: 1.5rem; font-weight: bold; color: white; border-bottom: 1px solid #222; }
+        .nav-menu { flex-grow: 1; padding: 20px 0; }
+        .nav-item {
+            width: 100%; display: flex; align-items: center; padding: 12px 25px;
+            border: none; background: transparent; color: #aaa; cursor: pointer;
+            transition: 0.3s; text-align: left; font-size: 0.95rem;
+        }
+        .nav-item i { margin-right: 15px; width: 20px; text-align: center; }
+        .nav-item:hover, .nav-item.active { background: #6366f1; color: white; }
+        .nav-group-label { padding: 15px 25px 5px; font-size: 0.7rem; color: #555; text-transform: uppercase; letter-spacing: 1px; }
+
+        /* Main Content - No extra gap */
+        .main-content {
+            margin-left: 250px; /* Matches sidebar width */
+            flex: 1;
+            padding: 30px;
+            width: calc(100% - 250px);
+            min-height: 100vh;
+        }
+
+        /* Budget Widget Styles */
+        .home-grid { display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 25px; margin-top: 30px; }
+        .progress-container { width: 100%; background: #1a1a2e; height: 10px; border-radius: 5px; overflow: hidden; margin: 12px 0; }
+        .progress-bar { height: 100%; transition: 0.8s ease; border-radius: 5px; }
+        .bg-safe { background: #10b981; }
+        .bg-warning { background: #f59e0b; }
+        .bg-danger { background: #f43f5e; }
+
+        .hide { display: none !important; }
+    </style>
 </head>
-<body>
+<body class="dark-theme">
 
-    <div class="sidebar">
-        <div class="logo">
-            <i class="fas fa-microchip"></i> BudgetWise
-        </div>
-        <nav>
-            <div class="nav-item active" onclick="showSection('dashboard')">
-                <i class="fas fa-th-large"></i> Dashboard
-            </div>
-            <div class="nav-item" onclick="showSection('transactions')">
-                <i class="fas fa-exchange-alt"></i> Transactions
-            </div>
-            <div class="nav-item" onclick="showSection('reports')">
-                <i class="fas fa-chart-line"></i> Analytics
-            </div>
-            <p class="nav-label">AI FEATURES</p>
-            <div class="nav-item" onclick="showSection('ai-advisor')">
-                <i class="fas fa-comment-dots"></i> AI Advisor
-            </div>
+<div class="app-container">
+    <aside class="sidebar">
+        <div class="brand"><i class="fas fa-microchip"></i> BudgetWise</div>
+        <nav class="nav-menu">
+            <button class="nav-item active" onclick="showSection('home')"><i class="fas fa-th-large"></i> Dashboard</button>
+            <button class="nav-item" onclick="showSection('expenses')"><i class="fas fa-exchange-alt"></i> Transactions</button>
+            <button class="nav-item" onclick="showSection('reports')"><i class="fas fa-chart-line"></i> Analytics</button>
+            
+            <div class="nav-group-label">AI Features</div>
+            <button class="nav-item" onclick="showSection('ai-insights')"><i class="fas fa-brain"></i> AI Insights</button>
+            <button class="nav-item" onclick="showSection('ai-advisor')"><i class="fas fa-comment-dots"></i> AI Advisor</button>
+            
+            <div class="nav-group-label">System</div>
+            <button class="nav-item" onclick="showSection('settings')"><i class="fas fa-cog"></i> Settings</button>
         </nav>
-    </div>
+        <button class="nav-item logout-link" onclick="logout()" style="margin-top: auto; border-top: 1px solid #222;"><i class="fas fa-sign-out-alt"></i> Log Out</button>
+    </aside>
 
-    <main>
-        <section id="dashboard">
-            <header>
-                <div>
-                    <h1>Financial Overview</h1>
-                    <p id="liveDate" class="text-dim"></p>
+    <main class="main-content">
+        <header class="header-flex" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+            <div>
+                <h1 id="sectionTitle"><i class="fas fa-chart-pie"></i> Financial Overview</h1>
+                <p id="liveDate" class="text-dim"></p>
+            </div>
+            <div class="header-right">
+                <div class="user-pill">
+                    <img id="navProfilePic" src="default-avatar.png" class="nav-avatar"> 
+                    <span id="topName">BHAVYA</span>
                 </div>
-                <div class="header-right">
-                    <div class="notif-icon" onclick="toggleNotifications()">
-                        <i class="fas fa-bell"></i>
-                        <span id="notifCount" class="badge-count" style="display:none;">0</span>
-                    </div>
-                    <div class="profile-pill">
-                        <img src="default-avatar.png" id="navProfilePic" alt="Profile">
-                        <span>BHAVYA</span>
-                    </div>
-                </div>
-            </header>
+            </div>
+        </header>
 
+        <section id="home">
             <div class="stats-grid">
-                <div class="glass-panel">
-                    <p class="text-dim">Available Cash</p>
-                    <h2 id="balanceDisplay">₹0.00</h2>
-                </div>
-                <div class="glass-panel">
-                    <p class="text-dim">Monthly Income</p>
-                    <h2 id="incomeDisplay" style="color: #10b981;">₹0.00</h2>
-                </div>
-                <div class="glass-panel">
-                    <p class="text-dim">Total Expenses</p>
-                    <h2 id="expenseDisplay" style="color: #f43f5e;">₹0.00</h2>
-                </div>
-                <div class="glass-panel">
-                    <p class="text-dim">Piggy Bank</p>
-                    <h2 id="savingsDisplay" style="color: #f59e0b;">₹0.00</h2>
-                </div>
+                <div class="stat-glass card-balance"><i class="fas fa-wallet stat-icon" style="color: #6366f1;"></i><div class="stat-info"><label>AVAILABLE CASH</label><h2 id="balanceDisplay">₹0</h2></div></div>
+                <div class="stat-glass card-income"><i class="fas fa-arrow-trend-up stat-icon" style="color: #10b981;"></i><div class="stat-info"><label>MONTHLY INCOME</label><h2 id="incomeDisplay">₹0</h2></div></div>
+                <div class="stat-glass card-expense"><i class="fas fa-credit-card stat-icon" style="color: #f43f5e;"></i><div class="stat-info"><label>TOTAL EXPENSES</label><h2 id="expenseDisplay">₹0</h2></div></div>
+                <div class="stat-glass card-savings"><i class="fas fa-piggy-bank stat-icon" style="color: #f59e0b;"></i><div class="stat-info"><label>PIGGY BANK</label><h2 id="savingsDisplay">₹0</h2></div></div>
             </div>
 
-            <div class="glass-panel" style="margin-top: 20px;">
-                <h3>Add New Transaction</h3>
-                <div class="form-grid">
-                    <input type="hidden" id="editId">
-                    <input type="date" id="transDate">
-                    <select id="transCategory">
-                        <option value="Food">Food</option>
-                        <option value="Rent">Rent</option>
-                        <option value="Bills">Bills</option>
-                        <option value="Shopping">Shopping</option>
-                        <option value="Salary">Salary</option>
-                    </select>
-                    <input type="text" id="transName" placeholder="Description">
-                    <input type="number" id="transAmount" placeholder="Amount">
-                    <select id="transType">
-                        <option value="expense">Expense</option>
-                        <option value="income">Income</option>
-                    </select>
-                    <button id="addEntryBtn" class="primary-btn">Add Entry</button>
+            <div class="home-grid">
+                <div class="glass-panel">
+                    <h3>Monthly Budget Status</h3>
+                    <div style="margin-top: 20px;">
+                        <div style="display: flex; justify-content: space-between;">
+                            <span>Current Spend</span>
+                            <span id="budgetStatusText">₹0 / ₹0</span>
+                        </div>
+                        <div class="progress-container">
+                            <div id="budgetBar" class="progress-bar bg-safe" style="width: 0%;"></div>
+                        </div>
+                        <p id="budgetWarning" style="font-size: 0.8rem; color: #888;">Set limit in settings</p>
+                    </div>
+                    
+                    <h3 style="margin-top: 30px; display: flex; justify-content: space-between;">
+                        Recent Activity
+                        <span onclick="showSection('expenses')" style="font-size: 0.8rem; color: #6366f1; cursor: pointer;">View All</span>
+                    </h3>
+                    <table class="transaction-table" style="margin-top: 15px; width: 100%;">
+                        <tbody id="recentActivityList"></tbody>
+                    </table>
+                </div>
+
+                <div class="glass-panel">
+                    <h3>Savings Goal Progress</h3>
+                    <div style="margin-top: 20px;">
+                        <div style="display: flex; justify-content: space-between;"><span>Emergency Fund</span><span id="goalPercent">0%</span></div>
+                        <div class="progress-container"><div id="goalBar" class="progress-bar" style="width: 0%; background: linear-gradient(90deg, #6366f1, #a855f7);"></div></div>
+                        <p class="text-dim" style="font-size: 0.8rem;">Target: ₹1,00,000</p>
+                    </div>
+                    <div class="ai-box" style="margin-top: 25px; border: 1px dashed #6366f1; background: rgba(99, 102, 241, 0.05);">
+                        <p style="font-size: 0.85rem;"><i class="fas fa-lightbulb" style="color: #f59e0b;"></i> <b>AI Pro-Tip:</b> Keep tracking to get personalized advice!</p>
+                    </div>
                 </div>
             </div>
         </section>
 
-        <section id="reports" class="hide">
-            <h1>Analytics</h1>
-            <div class="stats-grid" style="margin-bottom: 20px;">
-                <div class="glass-panel">
-                    <p class="text-dim">Total Spending</p>
-                    <h2 id="totalSpendingYear">₹0.00</h2>
-                    <small class="text-dim">This Year</small>
+        <section id="settings" class="hide">
+            <div class="glass-panel" style="max-width: 600px; margin: auto;">
+                <div style="text-align: center; margin-bottom: 2rem;">
+                    <div style="position: relative; display: inline-block;">
+                        <img id="profilePicBig" src="default-avatar.png" style="width: 120px; height: 120px; border-radius: 50%; border: 3px solid #6366f1;">
+                        <label for="imageUpload" style="position: absolute; bottom: 0; right: 0; background: #6366f1; padding: 8px; border-radius: 50%; cursor: pointer;"><i class="fas fa-camera"></i></label>
+                        <input type="file" id="imageUpload" accept="image/*" hidden onchange="previewImage(event)">
+                    </div>
+                    <h2 id="profileNameDisplay" style="margin-top: 15px;">BHAVYA</h2>
                 </div>
-                <div class="glass-panel">
-                    <p class="text-dim">Daily Average</p>
-                    <h2 id="dailyAverage">₹0.00</h2>
-                    <small class="text-dim">Last 30 days</small>
-                </div>
-            </div>
-
-            <div style="display: grid; grid-template-columns: 1.5fr 1fr; gap: 20px;">
-                <div class="glass-panel" style="height: 450px;">
-                    <h3><i class="fas fa-chart-line"></i> Market-Style Spending Trend</h3>
-                    <canvas id="stockTrendChart"></canvas>
-                </div>
-                <div class="glass-panel" style="height: 450px;">
-                    <h3><i class="fas fa-chart-pie"></i> Distribution (%)</h3>
-                    <canvas id="percentagePieChart"></canvas>
+                
+                <div style="display: flex; flex-direction: column; gap: 20px;">
+                    <div>
+                        <label>Update Display Name</label>
+                        <input type="text" id="editDisplayName" style="width: 100%; padding: 12px; background: #1a1a2e; border: 1px solid #333; color: white; border-radius: 8px; margin-top: 8px;">
+                    </div>
+                    <div style="background: rgba(99, 102, 241, 0.1); padding: 15px; border-radius: 10px; border: 1px solid #6366f1;">
+                        <label style="color: #6366f1; font-weight: bold;">Monthly Spending Budget (₹)</label>
+                        <input type="number" id="budgetLimitInput" placeholder="e.g. 50000" style="width: 100%; padding: 12px; background: #000; border: 1px solid #444; color: white; border-radius: 8px; margin-top: 8px;">
+                    </div>
+                    <button class="btn-purple-plus" onclick="updateSettings()">Save Changes</button>
                 </div>
             </div>
         </section>
 
-        <section id="ai-advisor" class="hide">
-            <h1>AI Advisor</h1>
-            <div class="glass-panel chat-box">
-                <div id="chatContainer" class="chat-content">
-                    <div class="chat-bubble ai">Hello Bhavya! Ask me anything about your spending!</div>
-                </div>
-                <div class="chat-input-area">
-                    <input type="text" id="aiInput" placeholder="Ask about food, balance, or advice...">
-                    <button onclick="sendMessage()" class="primary-btn">Ask AI</button>
-                </div>
+        <section id="expenses" class="hide">
+            <div class="action-bar">
+                <input type="hidden" id="editId">
+                <input type="text" id="transName" placeholder="Description">
+                <input type="number" id="transAmount" placeholder="Amount ₹">
+                <input type="date" id="transDate">
+                <select id="transCategory">
+                    <option value="Salary">Salary</option><option value="Food">Food</option>
+                    <option value="Rent">Rent</option><option value="Bills">Bills</option>
+                    <option value="Others">Others</option>
+                </select>
+                <select id="transType">
+                    <option value="income">Income (+)</option>
+                    <option value="expense">Expense (-)</option>
+                    <option value="to_piggy">To Piggy Bank</option>
+                </select>
+                <button type="button" id="addEntryBtn" class="btn-purple-plus">Add Entry</button>
+            </div>
+            <div class="glass-panel">
+                <table class="transaction-table">
+                    <thead><tr><th>Date</th><th>Category</th><th>Description</th><th>Amount</th><th>Type</th><th>Action</th></tr></thead>
+                    <tbody id="expenseList"></tbody>
+                </table>
             </div>
         </section>
+
+        <section id="ai-insights" class="hide"><div class="glass-panel"><button id="runAnalysisBtn" class="btn-purple-plus" style="width: 100%;">Run AI Analysis</button><div id="insightsContent" class="ai-box" style="margin-top:20px;"></div></div></section>
+        <section id="ai-advisor" class="hide"><div class="glass-panel chat-container" style="display: flex; flex-direction: column; height: 60vh;"><div id="chatBox" class="chat-box" style="flex-grow: 1; overflow-y: auto; padding: 15px;"></div><div class="chat-input-area" style="display: flex; gap: 10px; padding: 15px;"><input type="text" id="chatInput" placeholder="Ask AI advisor..."><button id="sendChatBtn" class="btn-purple-plus"><i class="fas fa-paper-plane"></i></button></div></div></section>
+        <section id="reports" class="hide"><div class="grid-2"><div class="glass-panel"><h3>Trend</h3><canvas id="trendChart"></canvas></div><div class="glass-panel"><h3>Breakdown</h3><canvas id="categoryChart"></canvas></div></div></section>
     </main>
+</div>
 
-    <div id="notifPanel" class="notif-panel hide">
-        <div class="notif-header">
-            <h3>Alerts</h3>
-            <button onclick="toggleNotifications()">×</button>
-        </div>
-        <div id="notifList"></div>
-    </div>
-
-    <script src="dashboard.js"></script>
+<script src="dashboard.js"></script>
 </body>
 </html>
