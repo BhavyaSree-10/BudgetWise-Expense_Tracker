@@ -4,17 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BudgetWise AI | Professional Dashboard</title>
-    <link rel="stylesheet" href="Dashboard.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         /* Global Layout Fixes */
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #0a0a12; color: white; }
         
-        .app-container { display: flex; min-height: 100vh; background: #0a0a12; }
+        .app-container { display: flex; min-height: 100vh; }
 
-        /* Sidebar - Pinned to the very left edge */
+        /* Sidebar */
         .sidebar {
             width: 250px;
             background: #11111e;
@@ -38,24 +37,45 @@
         .nav-item:hover, .nav-item.active { background: #6366f1; color: white; }
         .nav-group-label { padding: 15px 25px 5px; font-size: 0.7rem; color: #555; text-transform: uppercase; letter-spacing: 1px; }
 
-        /* Main Content - No extra gap */
+        /* Main Content */
         .main-content {
-            margin-left: 250px; /* Matches sidebar width */
+            margin-left: 250px;
             flex: 1;
             padding: 30px;
             width: calc(100% - 250px);
             min-height: 100vh;
         }
 
-        /* Budget Widget Styles */
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 30px; }
+        .stat-glass { background: #1a1a2e; padding: 20px; border-radius: 12px; border: 1px solid #222; display: flex; align-items: center; gap: 15px; }
+        .stat-icon { font-size: 2rem; }
+        .stat-info label { font-size: 0.7rem; color: #888; display: block; }
+
+        .glass-panel { background: #11111e; padding: 25px; border-radius: 15px; border: 1px solid #222; }
         .home-grid { display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 25px; margin-top: 30px; }
+        
         .progress-container { width: 100%; background: #1a1a2e; height: 10px; border-radius: 5px; overflow: hidden; margin: 12px 0; }
         .progress-bar { height: 100%; transition: 0.8s ease; border-radius: 5px; }
         .bg-safe { background: #10b981; }
         .bg-warning { background: #f59e0b; }
         .bg-danger { background: #f43f5e; }
 
+        .transaction-table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        .transaction-table th { text-align: left; color: #555; font-size: 0.8rem; padding: 10px; border-bottom: 1px solid #222; }
+        .transaction-table td { padding: 12px 10px; border-bottom: 1px solid #1a1a2e; font-size: 0.9rem; }
+
+        .action-bar { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 20px; background: #1a1a2e; padding: 15px; border-radius: 12px; }
+        .action-bar input, .action-bar select { background: #0a0a12; border: 1px solid #333; color: white; padding: 8px 12px; border-radius: 6px; }
+        
+        .btn-purple-plus { background: #6366f1; color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-weight: 600; }
+        .btn-purple-plus:hover { background: #4f46e5; }
+        .btn-edit { color: #6366f1; background: none; border: none; cursor: pointer; margin-right: 10px; }
+        .btn-delete { color: #f43f5e; background: none; border: none; cursor: pointer; }
+
         .hide { display: none !important; }
+        .text-dim { color: #888; font-size: 0.9rem; }
+        .nav-avatar { width: 35px; height: 35px; border-radius: 50%; object-fit: cover; border: 1px solid #6366f1; }
+        .user-pill { display: flex; align-items: center; gap: 10px; background: #1a1a2e; padding: 5px 15px; border-radius: 20px; }
     </style>
 </head>
 <body class="dark-theme">
@@ -64,16 +84,16 @@
     <aside class="sidebar">
         <div class="brand"><i class="fas fa-microchip"></i> BudgetWise</div>
         <nav class="nav-menu">
-            <button class="nav-item active" onclick="showSection('home')"><i class="fas fa-th-large"></i> Dashboard</button>
-            <button class="nav-item" onclick="showSection('expenses')"><i class="fas fa-exchange-alt"></i> Transactions</button>
-            <button class="nav-item" onclick="showSection('reports')"><i class="fas fa-chart-line"></i> Analytics</button>
+            <button class="nav-item active" onclick="showSection('home', 'Financial Overview')"><i class="fas fa-th-large"></i> Dashboard</button>
+            <button class="nav-item" onclick="showSection('expenses', 'Transaction History')"><i class="fas fa-exchange-alt"></i> Transactions</button>
+            <button class="nav-item" onclick="showSection('reports', 'Financial Analytics')"><i class="fas fa-chart-line"></i> Analytics</button>
             
             <div class="nav-group-label">AI Features</div>
-            <button class="nav-item" onclick="showSection('ai-insights')"><i class="fas fa-brain"></i> AI Insights</button>
-            <button class="nav-item" onclick="showSection('ai-advisor')"><i class="fas fa-comment-dots"></i> AI Advisor</button>
+            <button class="nav-item" onclick="showSection('ai-insights', 'Smart AI Insights')"><i class="fas fa-brain"></i> AI Insights</button>
+            <button class="nav-item" onclick="showSection('ai-advisor', 'Personal AI Advisor')"><i class="fas fa-comment-dots"></i> AI Advisor</button>
             
             <div class="nav-group-label">System</div>
-            <button class="nav-item" onclick="showSection('settings')"><i class="fas fa-cog"></i> Settings</button>
+            <button class="nav-item" onclick="showSection('settings', 'Account Settings')"><i class="fas fa-cog"></i> Settings</button>
         </nav>
         <button class="nav-item logout-link" onclick="logout()" style="margin-top: auto; border-top: 1px solid #222;"><i class="fas fa-sign-out-alt"></i> Log Out</button>
     </aside>
@@ -94,10 +114,10 @@
 
         <section id="home">
             <div class="stats-grid">
-                <div class="stat-glass card-balance"><i class="fas fa-wallet stat-icon" style="color: #6366f1;"></i><div class="stat-info"><label>AVAILABLE CASH</label><h2 id="balanceDisplay">₹0</h2></div></div>
-                <div class="stat-glass card-income"><i class="fas fa-arrow-trend-up stat-icon" style="color: #10b981;"></i><div class="stat-info"><label>MONTHLY INCOME</label><h2 id="incomeDisplay">₹0</h2></div></div>
-                <div class="stat-glass card-expense"><i class="fas fa-credit-card stat-icon" style="color: #f43f5e;"></i><div class="stat-info"><label>TOTAL EXPENSES</label><h2 id="expenseDisplay">₹0</h2></div></div>
-                <div class="stat-glass card-savings"><i class="fas fa-piggy-bank stat-icon" style="color: #f59e0b;"></i><div class="stat-info"><label>PIGGY BANK</label><h2 id="savingsDisplay">₹0</h2></div></div>
+                <div class="stat-glass"><i class="fas fa-wallet stat-icon" style="color: #6366f1;"></i><div class="stat-info"><label>AVAILABLE CASH</label><h2 id="balanceDisplay">₹0</h2></div></div>
+                <div class="stat-glass"><i class="fas fa-arrow-trend-up stat-icon" style="color: #10b981;"></i><div class="stat-info"><label>MONTHLY INCOME</label><h2 id="incomeDisplay">₹0</h2></div></div>
+                <div class="stat-glass"><i class="fas fa-credit-card stat-icon" style="color: #f43f5e;"></i><div class="stat-info"><label>TOTAL EXPENSES</label><h2 id="expenseDisplay">₹0</h2></div></div>
+                <div class="stat-glass"><i class="fas fa-piggy-bank stat-icon" style="color: #f59e0b;"></i><div class="stat-info"><label>PIGGY BANK</label><h2 id="savingsDisplay">₹0</h2></div></div>
             </div>
 
             <div class="home-grid">
@@ -116,7 +136,7 @@
                     
                     <h3 style="margin-top: 30px; display: flex; justify-content: space-between;">
                         Recent Activity
-                        <span onclick="showSection('expenses')" style="font-size: 0.8rem; color: #6366f1; cursor: pointer;">View All</span>
+                        <span onclick="showSection('expenses', 'Transaction History')" style="font-size: 0.8rem; color: #6366f1; cursor: pointer;">View All</span>
                     </h3>
                     <table class="transaction-table" style="margin-top: 15px; width: 100%;">
                         <tbody id="recentActivityList"></tbody>
@@ -130,34 +150,6 @@
                         <div class="progress-container"><div id="goalBar" class="progress-bar" style="width: 0%; background: linear-gradient(90deg, #6366f1, #a855f7);"></div></div>
                         <p class="text-dim" style="font-size: 0.8rem;">Target: ₹1,00,000</p>
                     </div>
-                    <div class="ai-box" style="margin-top: 25px; border: 1px dashed #6366f1; background: rgba(99, 102, 241, 0.05);">
-                        <p style="font-size: 0.85rem;"><i class="fas fa-lightbulb" style="color: #f59e0b;"></i> <b>AI Pro-Tip:</b> Keep tracking to get personalized advice!</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section id="settings" class="hide">
-            <div class="glass-panel" style="max-width: 600px; margin: auto;">
-                <div style="text-align: center; margin-bottom: 2rem;">
-                    <div style="position: relative; display: inline-block;">
-                        <img id="profilePicBig" src="default-avatar.png" style="width: 120px; height: 120px; border-radius: 50%; border: 3px solid #6366f1;">
-                        <label for="imageUpload" style="position: absolute; bottom: 0; right: 0; background: #6366f1; padding: 8px; border-radius: 50%; cursor: pointer;"><i class="fas fa-camera"></i></label>
-                        <input type="file" id="imageUpload" accept="image/*" hidden onchange="previewImage(event)">
-                    </div>
-                    <h2 id="profileNameDisplay" style="margin-top: 15px;">BHAVYA</h2>
-                </div>
-                
-                <div style="display: flex; flex-direction: column; gap: 20px;">
-                    <div>
-                        <label>Update Display Name</label>
-                        <input type="text" id="editDisplayName" style="width: 100%; padding: 12px; background: #1a1a2e; border: 1px solid #333; color: white; border-radius: 8px; margin-top: 8px;">
-                    </div>
-                    <div style="background: rgba(99, 102, 241, 0.1); padding: 15px; border-radius: 10px; border: 1px solid #6366f1;">
-                        <label style="color: #6366f1; font-weight: bold;">Monthly Spending Budget (₹)</label>
-                        <input type="number" id="budgetLimitInput" placeholder="e.g. 50000" style="width: 100%; padding: 12px; background: #000; border: 1px solid #444; color: white; border-radius: 8px; margin-top: 8px;">
-                    </div>
-                    <button class="btn-purple-plus" onclick="updateSettings()">Save Changes</button>
                 </div>
             </div>
         </section>
@@ -169,8 +161,14 @@
                 <input type="number" id="transAmount" placeholder="Amount ₹">
                 <input type="date" id="transDate">
                 <select id="transCategory">
-                    <option value="Salary">Salary</option><option value="Food">Food</option>
-                    <option value="Rent">Rent</option><option value="Bills">Bills</option>
+                    <option value="Salary">Salary</option>
+                    <option value="Food">Food</option>
+                    <option value="Rent">Rent</option>
+                    <option value="Bills">Bills</option>
+                    <option value="Fees">Fees</option>
+                    <option value="Travel">Travel</option> 
+                    <option value="Entertainment">Entertainment</option>        
+                    <option value="Shopping">Shopping</option>
                     <option value="Others">Others</option>
                 </select>
                 <select id="transType">
@@ -189,11 +187,28 @@
         </section>
 
         <section id="ai-insights" class="hide"><div class="glass-panel"><button id="runAnalysisBtn" class="btn-purple-plus" style="width: 100%;">Run AI Analysis</button><div id="insightsContent" class="ai-box" style="margin-top:20px;"></div></div></section>
-        <section id="ai-advisor" class="hide"><div class="glass-panel chat-container" style="display: flex; flex-direction: column; height: 60vh;"><div id="chatBox" class="chat-box" style="flex-grow: 1; overflow-y: auto; padding: 15px;"></div><div class="chat-input-area" style="display: flex; gap: 10px; padding: 15px;"><input type="text" id="chatInput" placeholder="Ask AI advisor..."><button id="sendChatBtn" class="btn-purple-plus"><i class="fas fa-paper-plane"></i></button></div></div></section>
-        <section id="reports" class="hide"><div class="grid-2"><div class="glass-panel"><h3>Trend</h3><canvas id="trendChart"></canvas></div><div class="glass-panel"><h3>Breakdown</h3><canvas id="categoryChart"></canvas></div></div></section>
+        <section id="ai-advisor" class="hide"><div class="glass-panel chat-container" style="display: flex; flex-direction: column; height: 60vh;"><div id="chatBox" class="chat-box" style="flex-grow: 1; overflow-y: auto; padding: 15px;"></div><div class="chat-input-area" style="display: flex; gap: 10px; padding: 15px;"><input type="text" id="chatInput" placeholder="Ask AI advisor..." style="flex:1; padding:10px; border-radius:8px; border:1px solid #333; background:#0a0a12; color:white;"><button id="sendChatBtn" class="btn-purple-plus"><i class="fas fa-paper-plane"></i></button></div></div></section>
+        <section id="reports" class="hide"><div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;"><div class="glass-panel"><h3>Trend</h3><canvas id="trendChart"></canvas></div><div class="glass-panel"><h3>Breakdown</h3><canvas id="categoryChart"></canvas></div></div></section>
+
+        <section id="settings" class="hide">
+            <div class="glass-panel" style="max-width: 600px; margin: auto;">
+                <div style="text-align: center; margin-bottom: 2rem;">
+                    <div style="position: relative; display: inline-block;">
+                        <img id="profilePicBig" src="default-avatar.png" style="width: 120px; height: 120px; border-radius: 50%; border: 3px solid #6366f1; object-fit: cover;">
+                        <label for="imageUpload" style="position: absolute; bottom: 0; right: 0; background: #6366f1; padding: 8px; border-radius: 50%; cursor: pointer;"><i class="fas fa-camera"></i></label>
+                        <input type="file" id="imageUpload" accept="image/*" hidden onchange="previewImage(event)">
+                    </div>
+                    <h2 id="profileNameDisplay" style="margin-top: 15px;">BHAVYA</h2>
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 20px;">
+                    <div><label>Update Display Name</label><input type="text" id="editDisplayName" style="width: 100%; padding: 12px; background: #1a1a2e; border: 1px solid #333; color: white; border-radius: 8px; margin-top: 8px;"></div>
+                    <div style="background: rgba(99, 102, 241, 0.1); padding: 15px; border-radius: 10px; border: 1px solid #6366f1;"><label style="color: #6366f1; font-weight: bold;">Monthly Spending Budget (₹)</label><input type="number" id="budgetLimitInput" style="width: 100%; padding: 12px; background: #000; border: 1px solid #444; color: white; border-radius: 8px; margin-top: 8px;"></div>
+                    <button class="btn-purple-plus" onclick="updateSettings()">Save Changes</button>
+                </div>
+            </div>
+        </section>
     </main>
 </div>
-
 <script src="dashboard.js"></script>
 </body>
 </html>
